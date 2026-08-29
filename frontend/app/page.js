@@ -329,35 +329,6 @@ export default function LandingPage() {
           }
         }
 
-        /* ---- Preview ---- */
-        .landing-preview-wrap {
-          max-width: 900px;
-          margin: 0 auto;
-          padding: 0 32px 96px;
-          text-align: center;
-        }
-        .landing-preview-frame {
-          margin-top: 32px;
-          text-align: left;
-          overflow: hidden;
-          padding: 0;
-        }
-        .landing-preview-chrome {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          padding: 12px 16px;
-          border-bottom: 1px solid var(--color-border);
-        }
-        .landing-preview-chrome span {
-          width: 9px;
-          height: 9px;
-          border-radius: 50%;
-          background: var(--color-border-strong);
-        }
-        .landing-preview-body {
-          padding: 24px 28px 20px;
-        }
       `}</style>
 
       <div className="landing-nav-wrap">
@@ -429,36 +400,6 @@ export default function LandingPage() {
               <p className="text-small" style={{ margin: 0, color: "var(--color-ink-muted)" }}>{step.body}</p>
             </div>
           ))}
-        </div>
-      </section>
-
-      <section id="preview" className="landing-preview-wrap">
-        <p className="text-micro" style={{ margin: "0 0 6px" }}>Live preview</p>
-        <h2 className="text-hero" style={{ fontSize: "1.9rem", margin: 0 }}>
-          See it in action
-        </h2>
-        <div className="card-elevated landing-preview-frame anim-fade-up">
-          <div className="landing-preview-chrome">
-            <span />
-            <span />
-            <span />
-          </div>
-          <div className="landing-preview-body">
-            <p
-              className="text-small"
-              style={{ margin: "0 0 4px", color: "var(--color-ink-faint)", textTransform: "uppercase", letterSpacing: 0.4 }}
-            >
-              Sample output
-            </p>
-            <p className="text-heading" style={{ margin: "0 0 20px" }}>
-              Marketing spend, traced by quarter
-            </p>
-            {/* <AnimatedLineChart data={HERO_TREND_DATA} valueFormatter={(v) => `RM${(v / 1000).toFixed(0)}K`} /> */}
-            <RotatingChart data={HERO_TREND_DATA} valueFormatter={(v) => `RM${(v / 1000).toFixed(0)}K`} />
-            <p className="text-small" style={{ margin: "16px 0 0", color: "var(--color-ink-muted)" }}>
-              Every point traces back to its source line item — no black-box summaries.
-            </p>
-          </div>
         </div>
       </section>
     </div>

@@ -1,59 +1,90 @@
-# Rentap AI — DevLeague 2026 Lab 1 Reference Build
+# Rentap AI
 
-**⚠️ This is a reference/prep repo, not the hackathon submission.**
-Everything here was built and tested before Challenge Day so we have a
-proven design to build from fast on Aug 22. The actual submission will be
-a fresh repo with real commits made live during the 09:30–16:30 build
-window — organizers check commit history for that.
+AI-powered financial report analysis. Upload PDFs, CSVs, or XLSX files and get automatic data extraction, PII masking, and anomaly/trend insights on a dashboard — built for DevLeague 2026, Lab 1: AI-Powered Financial Report Analysis.
 
-Use this repo to read code, copy patterns, and understand the architecture
-before Saturday. Don't push straight from this repo into the submission repo.
+## Problem
 
-## Challenge
+Financial reports arrive as a mix of structured and unstructured sources — PDFs, spreadsheets, scanned documents — and manually reading through them to catch trends, anomalies, and risks is slow and error-prone. Rentap AI extracts and interprets key financial data from these sources, flags noteworthy patterns, and presents findings in a clear dashboard so decisions can be made faster and with more confidence.
 
-Lab 1 — AI-Powered Financial Report Analysis (Powered by Experian)
-Extract data from PDFs/spreadsheets → detect trends/anomalies →
-present insights on a dashboard, with PDPA-compliant handling.
+## Features
 
-**Product name:** Rentap AI
+- **Multi-file batch upload** — upload up to 10 files (PDF/CSV/XLSX) at once; a single bad file doesn't fail the whole batch.
+- **Extraction with vision fallback** — text-layer PDFs are parsed directly; scanned/image-only PDFs fall back to AI vision extraction (via Groq) so even non-searchable documents can be processed.
+- **PII masking** — detected personal data (e.g. emails) is masked before it's returned or displayed, so sensitive information never reaches the frontend unmasked.
+- **Explainable insights** — every insight (variance spikes, duplicate entries, etc.) links back to the exact source row(s) it was computed from, including insights that span multiple files in a batch.
+- **Live progress polling** — uploads return immediately with a job ID; the frontend polls for stage updates instead of blocking on one long request.
+- **No persistence** — file bytes are processed in memory only and never written to disk, minimizing the footprint of any personal data that passes through the pipeline.
 
 ## Architecture
 
-- **Frontend:** Next.js (`frontend/`) — upload UI, dashboard, results
-- **Backend:** Express on Cloud Run (`backend-pipeline/`) — extraction → PII masking → anomaly detection → API response
-- **Data contract:** `Insight_Object_Data_Contract.md` — locked, read this first, it's what connects frontend and backend
+- **Frontend** (`frontend/`) — Next.js. Upload UI, staged-file review, processing state, results dashboard.
+- **Backend** (`backend/`) — Express on Cloud Run. Handles extraction (text/spreadsheet/vision fallback), PII masking, anomaly detection, and returns insights over a job-polling API.
 
-## Team scopes for Challenge Day
+## How it works
 
-### Student A — Ingest & Frontend
-- Read: `Frontend_Core_Functionalities.md`, `Insight_Object_Data_Contract.md`
-- Reference code: `frontend/` (all 4 states, dashboard, insight cards, drill-down)
-- Build on the day: upload UI, results dashboard, visual polish pass
-- Also own: the "first 3 seconds" wow-moment UX
+1. `POST /api/process` accepts one or more files under the `files` field (max 10, 10MB each), returns `202 { jobId }` immediately.
+2. Backend processes the batch in the background: extract → mask PII → detect anomalies across the merged row pool.
+3. Frontend polls `GET /api/status/:jobId` until `status: "done"` or `"error"`.
+4. Response shape:
+   ```
+   {
+     files: [{ filename, fileType, extractionMethod, rowCount, error }],
+     extracted: { rowCount, rows: [...] },
+     privacy: { maskedCount, matches: [...] },
+     insights: [...],
+     summary: { totalInsights, bySeverity }
+   }
+   ```
+   A single bad file doesn't fail the whole batch — it's recorded in `files[].error`, and rows are namespaced per file (`f0_row_1`, `f1_row_1`, etc.) so insights can span files.
 
-### Student B — Analysis, PDPA & Disclosure
-- Read: `AI_DISCLOSURE.md`, `PDPA_UI_Copy.md`, `Insight_Object_Data_Contract.md`
-- Reference code: `anomaly-detection/`, `pii-masking/`
-- Build on the day: anomaly detection wiring, PII masking wiring, AI_DISCLOSURE.md, PDPA UI copy
-- Also own: rubric line-by-line check before submission
+### Error codes
 
-### Thilak — Integration Lead
-- Pipeline wiring, Cloud Run + Vercel deploy, final integration testing
-- Reference code: `backend-pipeline/`, `vision-fallback/`
+| Code | Meaning |
+|---|---|
+| `UNSUPPORTED_FILE_TYPE` | File isn't PDF, CSV, or XLSX |
+| `FILE_TOO_LARGE` | File exceeds 10MB, or batch exceeds 10 files |
+| `EXTRACTION_FAILED` | Extraction (including vision fallback) could not read the file |
+| `NO_DATA_FOUND` | File(s) parsed successfully but contained no usable rows |
+| `JOB_NOT_FOUND` | Polled job ID doesn't exist or has expired |
+| `INTERNAL_ERROR` | Unexpected server-side failure |
 
-## Sample/test data
+## Data handling & privacy
 
-`sample-data/` — synthetic CSV/XLSX/PDF files covering the demo path,
-including a scanned-PDF vision-fallback test case. Safe to use for local
-dev; not the real submission's data (no organizer dataset was provided).
+- Uploaded files are held in memory only for the duration of processing and are never written to disk.
+- Detected PII (e.g. email addresses) in extracted fields is masked before insights are generated or any data leaves the backend.
+- Only the data necessary to produce insights is retained for the lifetime of a job (job records expire and are cleaned up automatically after a few minutes).
+- AI is used specifically for: (1) vision-based extraction as a fallback when a document has no text layer, and (2) no free-form generation — insight detection itself is deterministic/rule-based, so every finding is traceable to specific source rows rather than model-generated text.
 
 ## Running locally
 
-Backend: `cd backend-pipeline && npm install && npm start` (port 8080)
-Frontend: `cd frontend && npm install && cp .env.local.example .env.local && npm run dev`
+**Backend**
+```
+cd backend
+npm install
+cp .env.example .env   # add GROQ_API_KEY, set ALLOWED_ORIGIN to your frontend URL
+npm start
+```
 
-## Submission logistics
+**Frontend**
+```
+cd frontend
+npm install
+cp .env.local.example .env.local
+npm run dev
+```
 
-- Submit deadline: Aug 22, 16:30 sharp — no late submissions
-- Required: public GitHub repo, live demo link, pitch video (≤3 min), Project Description
-- Judging weights: Technical Execution 25%, Problem & Lab Alignment 20%, Innovation & Creativity 20%, Impact & Potential 20%, UX & Design 15%
+## Testing
+
+```
+node backend/integration.test.js
+```
+
+Sample test files are in `backend/sample-data/`, covering the demo path including a scanned-PDF vision-fallback case.
+
+## Deploy
+
+```
+gcloud run deploy rentap-ai-backend --source ./backend --region asia-southeast1 --project rentap-ai-devleague --set-env-vars="^@^ALLOWED_ORIGIN=https://rentap-ai.vercel.app@GROQ_API_KEY=your_actual_groq_key_here"
+```
+
+Frontend deploys to Vercel.

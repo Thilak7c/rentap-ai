@@ -1,22 +1,5 @@
 // backend-pipeline/test.js
 
-/**
- * Unit tests for groqVisionExtractor.js — mocked HTTP layer only, no
- * real network access (matches this sandbox's constraints, see that
- * file's own header). Uses the same lightweight console-assert pattern
- * as integration.test.js — no test framework dependency.
- *
- * Covers:
- *  - parseModelResponse: normal shape, bare-array legacy shape, markdown
- *    fences, <think> trace leakage, malformed-with-stray-prose recovery
- *  - callGroqWithRetry: succeeds after a 429, respects retry-after header
- *  - extractFromImages: NEW options-object signature (fetchImpl,
- *    onProgress, totalPages) — this is the call-site fix flagged when
- *    pipeline.js/visionFallback.js were updated for job-status polling.
- *    Also verifies pages run CONCURRENTLY and results are reassembled in
- *    original page order even when the mock resolves them out of order.
- */
-
 const {
   extractFromImages,
   parseModelResponse,

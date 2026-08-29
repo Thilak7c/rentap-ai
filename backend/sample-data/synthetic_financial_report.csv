@@ -1,0 +1,101 @@
+category,period,amount,vendor,notes
+Marketing,Q1 2026,45000,AdCo Sdn Bhd,Standard quarterly campaign spend
+Marketing,Q1 2026,12000,BrightAds Marketing Sdn Bhd,Social media ad placements
+Marketing,Q1 2026,8600,Social Buzz Agency Sdn Bhd,Influencer campaign package
+Marketing,Q2 2026,198000,AdCo Sdn Bhd,Approved by: Ahmad bin Hassan
+Marketing,Q2 2026,13500,BrightAds Marketing Sdn Bhd,Social media ad placements
+Marketing,Q3 2026,52000,AdCo Sdn Bhd,Standard quarterly campaign spend
+Marketing,Q3 2026,14200,BrightAds Marketing Sdn Bhd,Social media ad placements
+Marketing,Q3 2026,19500,Digital Reach Media Sdn Bhd,Programmatic display campaign
+Marketing,Q4 2026,58000,AdCo Sdn Bhd,Standard quarterly campaign spend
+Marketing,Q4 2026,15000,BrightAds Marketing Sdn Bhd,Social media ad placements
+Marketing,Q4 2026,22000,Digital Reach Media Sdn Bhd,Year-end brand campaign
+Office Supplies,Q1 2026,480,Stationery Plus Sdn Bhd,Monthly restock
+Office Supplies,Q1 2026,320,PrintWorks Supplies Sdn Bhd,Toner and paper
+Office Supplies,Q1 2026,210,EcoPrint Supplies Sdn Bhd,Recycled paper stock
+Office Supplies,Q2 2026,510,Stationery Plus Sdn Bhd,Monthly restock
+Office Supplies,Q2 2026,340,PrintWorks Supplies Sdn Bhd,Toner and paper
+Office Supplies,Q3 2026,495,Stationery Plus Sdn Bhd,Monthly restock
+Office Supplies,Q3 2026,8500,Unusual Vendor Sdn Bhd,Reviewed by: Siti Nurhaliza binti Rahman
+Office Supplies,Q3 2026,355,PrintWorks Supplies Sdn Bhd,Toner and paper
+Office Supplies,Q4 2026,520,Stationery Plus Sdn Bhd,Monthly restock
+Office Supplies,Q4 2026,330,PrintWorks Supplies Sdn Bhd,Toner and paper
+Travel & Accommodation,Q1 2026,8200,SkyLink Travel Agency Sdn Bhd,Client site visits
+Travel & Accommodation,Q1 2026,5400,ComfortStay Hotels Sdn Bhd,Regional team offsite
+Travel & Accommodation,Q2 2026,9100,SkyLink Travel Agency Sdn Bhd,Client site visits
+Travel & Accommodation,Q2 2026,6200,ComfortStay Hotels Sdn Bhd,Regional team offsite
+Travel & Accommodation,Q3 2026,15800,SkyLink Travel Agency Sdn Bhd,Contact: 012-3456789
+Travel & Accommodation,Q3 2026,7100,ComfortStay Hotels Sdn Bhd,Regional team offsite
+Travel & Accommodation,Q3 2026,4200,AsiaWide Airlines Sdn Bhd,Conference travel — Singapore
+Travel & Accommodation,Q4 2026,9800,SkyLink Travel Agency Sdn Bhd,Client site visits
+Travel & Accommodation,Q4 2026,6500,ComfortStay Hotels Sdn Bhd,Regional team offsite
+Travel & Accommodation,Q4 2026,4600,AsiaWide Airlines Sdn Bhd,Year-end partner summit
+IT & Software,Q1 2026,12000,CloudTech Solutions Sdn Bhd,Monthly SaaS subscription
+IT & Software,Q1 2026,3200,DevTools Malaysia Sdn Bhd,Developer license renewal
+IT & Software,Q1 2026,8900,SecureNet Systems Sdn Bhd,Endpoint security licenses
+IT & Software,Q2 2026,12500,CloudTech Solutions Sdn Bhd,Monthly SaaS subscription
+IT & Software,Q2 2026,3400,DevTools Malaysia Sdn Bhd,Developer license renewal
+IT & Software,Q3 2026,14000,CloudTech Solutions Sdn Bhd,Monthly SaaS subscription
+IT & Software,Q3 2026,14000,CloudTech Solutions Sdn Bhd,Monthly SaaS subscription
+IT & Software,Q3 2026,3600,DevTools Malaysia Sdn Bhd,Developer license renewal
+IT & Software,Q4 2026,13800,CloudTech Solutions Sdn Bhd,Monthly SaaS subscription
+IT & Software,Q4 2026,3550,DevTools Malaysia Sdn Bhd,Developer license renewal
+IT & Software,Q4 2026,9800,SecureNet Systems Sdn Bhd,Endpoint security licenses
+Professional Services,Q1 2026,18000,Lim & Partners Consulting Sdn Bhd,Strategy advisory retainer
+Professional Services,Q1 2026,9500,Precision Audit Services Sdn Bhd,Quarterly review
+Professional Services,Q2 2026,19500,Lim & Partners Consulting Sdn Bhd,Strategy advisory retainer
+Professional Services,Q2 2026,9800,Precision Audit Services Sdn Bhd,Quarterly review
+Professional Services,Q3 2026,20200,Lim & Partners Consulting Sdn Bhd,Strategy advisory retainer
+Professional Services,Q3 2026,10100,Precision Audit Services Sdn Bhd,Quarterly review
+Professional Services,Q3 2026,6200,TaxWise Advisors Sdn Bhd,Corporate tax filing support
+Professional Services,Q4 2026,21000,Lim & Partners Consulting Sdn Bhd,Strategy advisory retainer
+Professional Services,Q4 2026,24500,Precision Audit Services Sdn Bhd,Year-end statutory audit
+Utilities,Q1 2026,6800,Tenaga Power Distribution Sdn Bhd,Office electricity
+Utilities,Q1 2026,1200,AquaFlow Water Services Sdn Bhd,Office water supply
+Utilities,Q1 2026,890,Telco Broadband Solutions Sdn Bhd,Office internet line
+Utilities,Q2 2026,7100,Tenaga Power Distribution Sdn Bhd,Office electricity
+Utilities,Q2 2026,1250,AquaFlow Water Services Sdn Bhd,Office water supply
+Utilities,Q3 2026,7400,Tenaga Power Distribution Sdn Bhd,Office electricity
+Utilities,Q3 2026,1300,AquaFlow Water Services Sdn Bhd,Office water supply
+Utilities,Q4 2026,7600,Tenaga Power Distribution Sdn Bhd,Office electricity
+Utilities,Q4 2026,1280,AquaFlow Water Services Sdn Bhd,Office water supply
+Payroll & Benefits,Q1 2026,145000,PayStream HR Services Sdn Bhd,Monthly payroll processing
+Payroll & Benefits,Q2 2026,148000,PayStream HR Services Sdn Bhd,Monthly payroll processing
+Payroll & Benefits,Q2 2026,5200,PayStream HR Services Sdn Bhd,Recruitment placement fee
+Payroll & Benefits,Q3 2026,151000,PayStream HR Services Sdn Bhd,Monthly payroll processing
+Payroll & Benefits,Q4 2026,156000,PayStream HR Services Sdn Bhd,Monthly payroll processing
+Payroll & Benefits,Q4 2026,12500,PayStream HR Services Sdn Bhd,Year-end performance bonus pool
+Rent & Facilities,Q1 2026,22000,Menara Height Properties Sdn Bhd,Office lease
+Rent & Facilities,Q1 2026,2900,FacilityCare Maintenance Sdn Bhd,Quarterly maintenance contract
+Rent & Facilities,Q2 2026,22000,Menara Height Properties Sdn Bhd,Office lease
+Rent & Facilities,Q3 2026,22000,Menara Height Properties Sdn Bhd,Office lease
+Rent & Facilities,Q3 2026,3100,FacilityCare Maintenance Sdn Bhd,Quarterly maintenance contract
+Rent & Facilities,Q4 2026,22500,Menara Height Properties Sdn Bhd,Office lease renewal
+Rent & Facilities,Q4 2026,3200,FacilityCare Maintenance Sdn Bhd,Quarterly maintenance contract
+Equipment & Maintenance,Q1 2026,5600,OfficeTech Equipment Sdn Bhd,Printer and peripherals
+Equipment & Maintenance,Q1 2026,1100,QuickFix Repairs Sdn Bhd,General repairs
+Equipment & Maintenance,Q2 2026,4200,OfficeTech Equipment Sdn Bhd,Printer and peripherals
+Equipment & Maintenance,Q2 2026,950,QuickFix Repairs Sdn Bhd,General repairs
+Equipment & Maintenance,Q3 2026,6100,OfficeTech Equipment Sdn Bhd,Printer and peripherals
+Equipment & Maintenance,Q3 2026,1300,QuickFix Repairs Sdn Bhd,General repairs
+Equipment & Maintenance,Q3 2026,2200,TechSupply Wholesale Sdn Bhd,Replacement monitors
+Equipment & Maintenance,Q4 2026,15200,OfficeTech Equipment Sdn Bhd,Settled via account 5123456789
+Equipment & Maintenance,Q4 2026,1050,QuickFix Repairs Sdn Bhd,General repairs
+Training & Development,Q1 2026,4200,SkillUp Academy Sdn Bhd,Staff certification courses
+Training & Development,Q1 2026,2600,LeaderEdge Training Sdn Bhd,Management workshop series
+Training & Development,Q2 2026,3800,SkillUp Academy Sdn Bhd,Staff certification courses
+Training & Development,Q2 2026,2900,LeaderEdge Training Sdn Bhd,Management workshop series
+Training & Development,Q3 2026,4500,SkillUp Academy Sdn Bhd,Staff certification courses
+Training & Development,Q3 2026,3100,LeaderEdge Training Sdn Bhd,Management workshop series
+Training & Development,Q4 2026,4700,SkillUp Academy Sdn Bhd,Email queries to finance@rentapfinserve.com.my
+Training & Development,Q4 2026,3300,LeaderEdge Training Sdn Bhd,Management workshop series
+Insurance,Q1 2026,3200,Guardian Insurance Bhd,Annual policy — quarterly instalment
+Insurance,Q2 2026,3200,Guardian Insurance Bhd,Annual policy — quarterly instalment
+Insurance,Q3 2026,3350,Guardian Insurance Bhd,Annual policy — quarterly instalment
+Insurance,Q4 2026,3350,Guardian Insurance Bhd,IC: 900101-14-5523
+Bank Charges & Fees,Q1 2026,320,Maybank Corporate Sdn Bhd,Monthly account fees
+Bank Charges & Fees,Q2 2026,340,Maybank Corporate Sdn Bhd,Monthly account fees
+Bank Charges & Fees,Q3 2026,310,Maybank Corporate Sdn Bhd,Monthly account fees
+Bank Charges & Fees,Q4 2026,355,Maybank Corporate Sdn Bhd,Monthly account fees
+Professional Services,Q2 2026,4800,Lim & Partners Consulting Sdn Bhd,Contract review — one-off
+Marketing,Q1 2026,6100,Digital Reach Media Sdn Bhd,Trade show booth design

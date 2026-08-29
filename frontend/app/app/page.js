@@ -12,7 +12,7 @@ import ResultsDashboard from "../../components/ResultsDashboard";
 import PrivacyNotice from "../../components/PrivacyNotice";
 import Toast from "../../components/Toast";
 import Confetti from "../../components/Confetti";
-import { processDocument, ApiError, ErrorCodes } from "../../lib/api";
+import { processFiles, ApiError, ErrorCodes } from "../../lib/api";
 import { DEMO_MODE_RESPONSE } from "../../lib/demoModeData";
 
 const STATUS = {
@@ -63,24 +63,24 @@ function BrandMarkIcon() {
 
 export default function HomePage() {
   const [status, setStatus] = useState(STATUS.IDLE);
-  const [stagedFile, setStagedFile] = useState(null);
+  const [stagedFiles, setStagedFiles] = useState([]);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [showDownload, setShowDownload] = useState(false);
 
-  const handleFileValidated = useCallback((file) => {
-    setStagedFile(file);
+  const handleFilesValidated = useCallback((files) => {
+    setStagedFiles(files);
     setStatus(STATUS.STAGED);
   }, []);
 
-  const handleChooseDifferentFile = useCallback(() => {
-    setStagedFile(null);
+  const handleChooseDifferentFiles = useCallback(() => {
+    setStagedFiles([]);
     setStatus(STATUS.IDLE);
   }, []);
 
-  const runAnalysis = useCallback(async (file) => {
+  const runAnalysis = useCallback(async (files) => {
     setStatus(STATUS.PROCESSING);
     setError(null);
     setShowDownload(false);
@@ -88,7 +88,7 @@ export default function HomePage() {
     const minDelay = wait(MIN_PROCESSING_MS);
 
     try {
-      const [data] = await Promise.all([processDocument(file), minDelay]);
+      const [data] = await Promise.all([processFiles(files), minDelay]);
       setResult(data);
       setStatus(STATUS.RESULTS);
       setShowConfetti(true);
@@ -103,8 +103,8 @@ export default function HomePage() {
   }, []);
 
   const handleProceedToAnalyze = useCallback(() => {
-    if (stagedFile) runAnalysis(stagedFile);
-  }, [stagedFile, runAnalysis]);
+    if (stagedFiles.length > 0) runAnalysis(stagedFiles);
+  }, [stagedFiles, runAnalysis]);
 
   const handleUseDemoMode = useCallback(() => {
     setResult(DEMO_MODE_RESPONSE);
@@ -116,7 +116,7 @@ export default function HomePage() {
 
   const handleReset = useCallback(() => {
     setStatus(STATUS.IDLE);
-    setStagedFile(null);
+    setStagedFiles([]);
     setResult(null);
     setError(null);
     setShowConfetti(false);
@@ -171,22 +171,22 @@ export default function HomePage() {
           )}
         </div>
 
-        <div style={{ maxWidth: 720, margin: "0 auto", padding: "32px 24px 80px", width: "100%" }}>
+        <div style={{ maxWidth: status === STATUS.RESULTS ? 1100 : 720, margin: "0 auto", padding: "32px 24px 80px", width: "100%" }}>
           <StepTracker steps={STEPS} activeIndex={activeStep} />
 
           {status === STATUS.IDLE && (
-            <>
+             <>
               <p className="text-body" style={{ margin: "0 0 24px", color: "var(--color-ink-muted)", maxWidth: 480 }}>
-                Upload a financial report to get AI-assisted extraction with explainable,
+                Upload financial reports to get AI-assisted extraction with explainable,
                 rule-based insights — every finding traces back to the source data.
               </p>
-              <UploadZone onFileSelected={handleFileValidated} status={status} />
+              <UploadZone onFilesSelected={handleFilesValidated} status={status} />
               <PrivacyNotice />
             </>
           )}
 
-          {status === STATUS.STAGED && stagedFile && (
-            <StagedFile file={stagedFile} onProceed={handleProceedToAnalyze} onChooseDifferent={handleChooseDifferentFile} />
+          {status === STATUS.STAGED && stagedFiles.length > 0 && (
+            <StagedFile files={stagedFiles} onProceed={handleProceedToAnalyze} onChooseDifferent={handleChooseDifferentFiles} />
           )}
 
           {status === STATUS.PROCESSING && <ProcessingState />}

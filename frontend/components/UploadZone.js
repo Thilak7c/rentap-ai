@@ -1,61 +1,64 @@
+// frontend/components/UploadZone.js
 "use client";
 
 import { useState, useRef, useCallback } from "react";
 
 const ACCEPTED_TYPES = ".pdf,.csv,.xlsx";
 const MAX_SIZE_BYTES = 10 * 1024 * 1024;
+const MAX_FILES = 10; // must match backend MAX_FILES in server.js
 
-/**
- * Renders the idle and uploading states. Processing and error states are
- * handled by sibling components (ProcessingState, ErrorState) so each
- * state stays a focused, independently reasoned-about piece — see
- * Frontend_Core_Functionalities.md Section 2 for why all four states are
- * treated as first-class, not just the happy path.
- */
-export default function UploadZone({ onFileSelected, status }) {
+export default function UploadZone({ onFilesSelected, status }) {
   const [isDragging, setIsDragging] = useState(false);
   const [validationError, setValidationError] = useState(null);
   const inputRef = useRef(null);
 
   const validateAndSubmit = useCallback(
-    (file) => {
+    (fileList) => {
       setValidationError(null);
-      if (!file) return;
+      const files = Array.from(fileList || []);
+      if (files.length === 0) return;
 
-      const ext = file.name.split(".").pop().toLowerCase();
-      if (!["pdf", "csv", "xlsx"].includes(ext)) {
-        setValidationError("Only PDF, CSV, and XLSX files are supported.");
-        return;
-      }
-      if (file.size === 0) {
-        setValidationError("This file appears to be empty.");
-        return;
-      }
-      if (file.size > MAX_SIZE_BYTES) {
-        setValidationError("File is too large. Please use a file under 10MB.");
+      if (files.length > MAX_FILES) {
+        setValidationError(`Please select ${MAX_FILES} files or fewer at a time.`);
         return;
       }
 
-      onFileSelected(file);
+      const validFiles = [];
+      for (const file of files) {
+        const ext = file.name.split(".").pop().toLowerCase();
+        if (!["pdf", "csv", "xlsx"].includes(ext)) {
+          setValidationError(`"${file.name}" is not a supported type. Only PDF, CSV, and XLSX are supported.`);
+          return;
+        }
+        if (file.size === 0) {
+          setValidationError(`"${file.name}" appears to be empty.`);
+          return;
+        }
+        if (file.size > MAX_SIZE_BYTES) {
+          setValidationError(`"${file.name}" is too large. Please use files under 10MB.`);
+          return;
+        }
+        validFiles.push(file);
+      }
+
+      onFilesSelected(validFiles);
     },
-    [onFileSelected]
+    [onFilesSelected]
   );
 
   const handleDrop = useCallback(
     (e) => {
       e.preventDefault();
       setIsDragging(false);
-      const file = e.dataTransfer.files?.[0];
-      validateAndSubmit(file);
+      validateAndSubmit(e.dataTransfer.files);
     },
     [validateAndSubmit]
   );
 
   const handleInputChange = useCallback(
     (e) => {
-      const file = e.target.files?.[0];
-      validateAndSubmit(file);
-      e.target.value = ""; // allow re-selecting the same file after an error
+      validateAndSubmit(e.target.files);
+      e.target.value = "";
     },
     [validateAndSubmit]
   );
@@ -93,6 +96,7 @@ export default function UploadZone({ onFileSelected, status }) {
         <input
           ref={inputRef}
           type="file"
+          multiple
           accept={ACCEPTED_TYPES}
           onChange={handleInputChange}
           style={{ display: "none" }}
@@ -116,10 +120,10 @@ export default function UploadZone({ onFileSelected, status }) {
           📄
         </div>
         <p className="text-heading" style={{ margin: "0 0 6px" }}>
-          {isBusy ? "Uploading…" : "Drop a financial report here"}
+          {isBusy ? "Uploading…" : "Drop financial reports here"}
         </p>
         <p className="text-small" style={{ margin: 0 }}>
-          {isBusy ? "Please wait" : "or click to browse — PDF, CSV, or XLSX, up to 10MB"}
+          {isBusy ? "Please wait" : `or click to browse — PDF, CSV, or XLSX, up to 10MB each, up to ${MAX_FILES} files`}
         </p>
       </div>
 

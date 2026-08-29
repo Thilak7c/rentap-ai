@@ -1,33 +1,14 @@
 // frontend/lib/api.js
 
-/**
- * API client for /api/process (job-based, with live progress polling)
- * ---------------------------------
- * Matches the locked Insight Object Data Contract exactly for the final
- * result shape (see Insight_Object_Data_Contract.md / Super Docs Section
- * 7). Kept separate from UI components so the fetch/error/polling logic
- * is testable and reusable independent of any specific component.
- *
- * ARCHITECTURE CHANGE: processDocument() now does two things instead of
- * one — (1) POST the file and get back a jobId, (2) poll
- * GET /api/status/:jobId until the job reaches a terminal state. An
- * optional onProgress(stage) callback fires on every poll tick with the
- * backend's raw stage string, so the caller (ProcessingState) can show
- * a live label. Callers that don't pass onProgress are unaffected —
- * behavior degrades gracefully to "just wait for the final result."
- */
-
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080";
 const POLL_INTERVAL_MS = 1000;
 
-// Mirrors the error codes documented in the contract — used by the UI to
-// pick the right message per Frontend_Core_Functionalities.md Section 5.
 export const ErrorCodes = {
   UNSUPPORTED_FILE_TYPE: "UNSUPPORTED_FILE_TYPE",
   FILE_TOO_LARGE: "FILE_TOO_LARGE",
   EXTRACTION_FAILED: "EXTRACTION_FAILED",
   NO_DATA_FOUND: "NO_DATA_FOUND",
-  NETWORK_ERROR: "NETWORK_ERROR", // client-side only — backend unreachable/timeout
+  NETWORK_ERROR: "NETWORK_ERROR",
 };
 
 export class ApiError extends Error {
@@ -39,10 +20,10 @@ export class ApiError extends Error {
 
 const FRIENDLY_MESSAGES = {
   [ErrorCodes.UNSUPPORTED_FILE_TYPE]: "Only PDF, CSV, and XLSX files are supported.",
-  [ErrorCodes.FILE_TOO_LARGE]: "This file is too large. Please try a file under 10MB.",
+  [ErrorCodes.FILE_TOO_LARGE]: "One of these files is too large. Please try files under 10MB.",
   [ErrorCodes.EXTRACTION_FAILED]:
-    "We couldn't read this document. If it's a scanned PDF, try a text-based version instead.",
-  [ErrorCodes.NO_DATA_FOUND]: "No usable financial data was found in this document.",
+    "We couldn't read one of these documents. If it's a scanned PDF, try a text-based version instead.",
+  [ErrorCodes.NO_DATA_FOUND]: "No usable financial data was found in these documents.",
   [ErrorCodes.NETWORK_ERROR]: "Couldn't reach the server. Check your connection and try again.",
 };
 
@@ -55,20 +36,19 @@ function sleep(ms) {
 }
 
 /**
- * Uploads a file, then polls until the job finishes. Returns the parsed
- * contract-shaped response. Throws ApiError on any failure — caller is
- * responsible for catching and routing to the appropriate UI error state.
+ * Uploads a batch of files (1 or more), then polls until the job
+ * finishes. Returns the batch-shaped response: { files, extracted,
+ * privacy, insights, summary }. A single file is just a batch of one —
+ * always call this, never a separate single-file path.
  *
- * @param {File} file
+ * @param {File[]|FileList} files
  * @param {Object} [opts]
  * @param {AbortSignal} [opts.signal]
- * @param {(stage: string) => void} [opts.onProgress] - called on every
- *   poll tick with the backend's raw stage string (e.g. "parsing",
- *   "extracted_page_2_of_4"). Optional — safe to omit.
+ * @param {(stage: string) => void} [opts.onProgress]
  */
-export async function processDocument(file, { signal, onProgress } = {}) {
+export async function processFiles(files, { signal, onProgress } = {}) {
   const formData = new FormData();
-  formData.append("file", file);
+  Array.from(files).forEach((file) => formData.append("files", file));
 
   let startResponse;
   try {
@@ -78,7 +58,7 @@ export async function processDocument(file, { signal, onProgress } = {}) {
       signal,
     });
   } catch (err) {
-    if (err.name === "AbortError") throw err; // let caller handle cancellation distinctly
+    if (err.name === "AbortError") throw err;
     throw new ApiError(ErrorCodes.NETWORK_ERROR, "Could not reach the server.");
   }
 
@@ -134,7 +114,7 @@ async function pollUntilDone(jobId, { signal, onProgress }) {
     if (body.stage && onProgress) onProgress(body.stage);
 
     if (body.status === "done") {
-      return body.result; // full contract-shaped response
+      return body.result; // batch-shaped: { files, extracted, privacy, insights, summary }
     }
     if (body.status === "error") {
       throw new ApiError(body.error?.code || ErrorCodes.EXTRACTION_FAILED, body.error?.message);
